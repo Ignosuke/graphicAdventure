@@ -3,6 +3,7 @@ package main;
 
 import graphics.DrawingSurface;
 import graphics.Window;
+import state.GameState;
 
 public class App {
     private static boolean ejecuting = false;
@@ -12,11 +13,7 @@ public class App {
 
     private static DrawingSurface drawingSurface;
     private static Window window;
-
-    public static void main(String[] args) throws Exception {
-        StartGame();
-        mainIterator();
-    }
+    private static GameState gs;
 
     private static void StartGame() {
         ejecuting = true;
@@ -24,14 +21,16 @@ public class App {
         Starter();
     }
 
-    private static void Stop() {
-        ejecuting = false;
+    // private static void Stop() {
+    //     ejecuting = false;
 
-        System.exit(0);
-    }
+    //     System.exit(0);
+    // }
 
     private static void Starter() {
-        createWindow(1280,720, "Fate's path");
+        createWindow(1280,720, "Test");
+        
+        gs = new GameState(drawingSurface);
     }
     
     private static void createWindow(int width, int height, String name) {
@@ -40,11 +39,14 @@ public class App {
     }
 
     private static void update() {
+        drawingSurface.update(gs);
+
         updates_per_second++;
     }
 
     private static void draw() {
-        drawingSurface.draw();
+        drawingSurface.draw(gs);
+
         frames_per_second++;
     }
 
@@ -73,8 +75,8 @@ public class App {
             draw();
 
             if (System.nanoTime() - referenceUpdateCounter >= NANOS_PER_SECOND) {
-                System.out.println("UPS: " + updates_per_second + " FPS: " + frames_per_second);
-                window.setTitle("Fate's path FPS:" + frames_per_second + " UPS:" + updates_per_second);
+                // System.out.println("UPS: " + updates_per_second + " FPS: " + frames_per_second); //show on console UPS and FPS
+                window.setTitle("Test FPS:" + frames_per_second + " UPS:" + updates_per_second);
 
                 referenceUpdateCounter = System.nanoTime();
 
@@ -82,5 +84,10 @@ public class App {
                 frames_per_second = 0;
             }
         }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        StartGame();
+        mainIterator();
     }
 }
